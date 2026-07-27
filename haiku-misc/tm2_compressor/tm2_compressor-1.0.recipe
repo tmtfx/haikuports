@@ -1,0 +1,55 @@
+SUMMARY="TM2 compression utilities"
+DESCRIPTION="TM2 is a Tar + Parallel BZip2 + BFS attributes compression format. \
+The Bzip 2 is multithreaded and the attributes are stored as flattened BMessages. \
+There are 3 main commands + 1 stub-executable file: \
+A compressor, an extractor, a tool to create self-extracting files (so there's no \
+need to share these tools. (the stub file is needed to create the self-extracting \
+files."
+HOMEPAGE="https://github.com/tmtfx/TM2_compressor"
+COPYRIGHT="2026 Fabio Tomat"
+LICENSE="MIT"
+REVISION="1"
+SOURCE_URI="https://github.com/tmtfx/TM2_compressor/archive/refs/tags/$portVersion.tar.gz"
+CHECKSUM_SHA256="51036587526f50fefc5e1b7098763781f8e156502bf51e05c7d9a2e47387e8b6"
+SOURCE_DIR="TM2_compressor-$portVersion"
+
+ARCHITECTURES="all !x86_gcc2"
+SECONDARY_ARCHITECTURES="x86"
+
+PROVIDES="
+	tm2_compressor = $portVersion
+	tm2_extractor = $portVersion
+	tm2_sfx_creator = $portVersion
+	cmd:tm2_compressor
+	cmd:tm2_extractor
+	cmd:tm2_sfx_creator
+	cmd:tm2_sfx_stub
+	"
+REQUIRES="
+	haiku$secondaryArchSuffix
+	bzip2
+	"
+
+BUILD_REQUIRES="
+	haiku${secondaryArchSuffix}_devel
+	bzip2_devel
+	makefile_engine
+	"
+BUILD_PREREQUIRES="
+	cmd:gcc$secondaryArchSuffix
+	cmd:make
+	"
+
+BUILD()
+{
+	make $jobArgs
+}
+
+INSTALL()
+{
+	mkdir -p $binDir
+	cp -a tm2_compressor $binDir/tm2_compressor
+	cp -a tm2_extractor $binDir/tm2_extractor
+	cp -a tm2_sfx_creator $binDir/tm2_sfx_creator
+	cp -a tm2_sfx_stub $binDir/tm2_sfx_stub
+}
