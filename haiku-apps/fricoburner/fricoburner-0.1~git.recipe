@@ -1,0 +1,44 @@
+SUMMARY="A native Haiku CD/DVD burner that preserves BFS attributes"
+DESCRIPTION="FricoBurner copies discs, burns ISO images, and burns files or \
+directories to CD/DVD while preserving BFS extended attributes, by staging \
+data through a temporary mounted BFS image before burning."
+HOMEPAGE="https://github.com/tmtfx/FricoBurner"
+COPYRIGHT="2026 Pirati Del Frico"
+LICENSE="MIT"
+REVISION="1"
+srcGitRev="798baa58d4e0bb6748e30bfc2147721600bbdde9"
+SOURCE_URI="$HOMEPAGE/archive/$srcGitRev.tar.gz"
+CHECKSUM_SHA256="c3e808c9f512c34ea461c503d0cee2af73ef7b11704ec8bbaa7e30a05d3f92a0"
+SOURCE_DIR="FricoBurner-$srcGitRev"
+
+ARCHITECTURES="all"
+
+PROVIDES="
+	fricoburner = $portVersion
+	app:FricoBurner = $portVersion
+	"
+REQUIRES="
+	haiku
+	"
+
+BUILD_REQUIRES="
+	haiku_devel
+	"
+BUILD_PREREQUIRES="
+	cmd:gcc
+	cmd:jam
+	"
+
+BUILD()
+{
+	jam -q FricoBurner
+}
+
+INSTALL()
+{
+	mkdir -p $appsDir/FricoBurner/bin
+	cp bin/FricoBurner $appsDir/FricoBurner/bin/
+	cp -r resources $appsDir/FricoBurner/
+
+	addAppDeskbarSymlink $appsDir/FricoBurner/bin/FricoBurner
+}
